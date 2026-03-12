@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchWarehousesUseCase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-code-assignment</a> &gt; <a href="index.source.html" class="el_package">com.fulfilment.application.monolith.warehouses.domain.usecases</a> &gt; <span class="el_source">SearchWarehousesUseCase.java</span></div><h1>SearchWarehousesUseCase.java</h1><pre class="source lang-java linenums">package com.fulfilment.application.monolith.warehouses.domain.usecases;
+
+import com.fulfilment.application.monolith.warehouses.domain.models.Warehouse;
+import com.fulfilment.application.monolith.warehouses.domain.ports.WarehouseRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import java.util.List;
+
+@ApplicationScoped
+<span class="fc" id="L10">public class SearchWarehousesUseCase {</span>
+
+  @Inject
+  WarehouseRepository warehouseRepository;
+
+  public PagedResult&lt;Warehouse&gt; execute(SearchCommand command) {
+<span class="fc" id="L16">    return warehouseRepository.search(command);</span>
+  }
+
+<span class="fc" id="L19">  public record SearchCommand(</span>
+      String location,
+      Integer minCapacity,
+      Integer maxCapacity,
+      String sortBy,
+      String sortOrder,
+      int page,
+      int pageSize
+  ) {
+
+  }
+
+<span class="fc" id="L31">  public record PagedResult&lt;T&gt;(</span>
+      List&lt;T&gt; items,
+      int currentPage,
+      int pageSize,
+      long totalItems,
+      int totalPages
+  ) {
+
+    public static &lt;T&gt; PagedResult&lt;T&gt; from(List&lt;T&gt; items, int page, int pageSize, long totalItems) {
+<span class="fc" id="L40">      int totalPages = (int) Math.ceil((double) totalItems / pageSize);</span>
+<span class="fc" id="L41">      return new PagedResult&lt;&gt;(items, page, pageSize, totalItems, totalPages);</span>
+    }
+  }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
