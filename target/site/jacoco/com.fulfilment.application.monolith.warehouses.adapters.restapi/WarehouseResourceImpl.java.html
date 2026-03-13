@@ -30,7 +30,7 @@ import java.util.Set;
 
 @Path(&quot;/warehouse&quot;)
 @RequestScoped
-<span class="nc" id="L33">public class WarehouseResourceImpl {</span>
+<span class="fc" id="L33">public class WarehouseResourceImpl {</span>
 
     @Inject private WarehouseRepository warehouseRepository;
     @Inject private CreateWarehouseOperation createWarehouseOperation;
@@ -42,7 +42,7 @@ import java.util.Set;
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List&lt;Warehouse&gt; listAllWarehousesUnits() {
-<span class="nc" id="L45">        return warehouseRepository.getAll().stream().map(this::toWarehouseResponse).toList();</span>
+<span class="fc" id="L45">        return warehouseRepository.getAll().stream().map(this::toWarehouseResponse).toList();</span>
     }
 
   @POST
@@ -50,11 +50,11 @@ import java.util.Set;
   @Produces(MediaType.APPLICATION_JSON)
   public Warehouse createANewWarehouseUnit(@NotNull Warehouse data) {
     // Convert API model to domain model
-<span class="nc" id="L53">    var domainWarehouse = new com.fulfilment.application.monolith.warehouses.domain.models.Warehouse();</span>
-<span class="nc" id="L54">    domainWarehouse.businessUnitCode = data.getBusinessUnitCode();</span>
-<span class="nc" id="L55">    domainWarehouse.location = data.getLocation();</span>
-<span class="nc" id="L56">    domainWarehouse.capacity = data.getCapacity();</span>
-<span class="nc bnc" id="L57" title="All 2 branches missed.">    domainWarehouse.stock = data.getStock() != null ? data.getStock() : 0;</span>
+<span class="fc" id="L53">    var domainWarehouse = new com.fulfilment.application.monolith.warehouses.domain.models.Warehouse();</span>
+<span class="fc" id="L54">    domainWarehouse.businessUnitCode = data.getBusinessUnitCode();</span>
+<span class="fc" id="L55">    domainWarehouse.location = data.getLocation();</span>
+<span class="fc" id="L56">    domainWarehouse.capacity = data.getCapacity();</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">    domainWarehouse.stock = data.getStock() != null ? data.getStock() : 0;</span>
 
     try {
       // Create warehouse through use case (includes validations)
@@ -62,8 +62,8 @@ import java.util.Set;
       
       // Return the created warehouse
 <span class="nc" id="L64">      return toWarehouseResponse(domainWarehouse);</span>
-<span class="nc" id="L65">    } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L66">      throw new WebApplicationException(e.getMessage(), 400);</span>
+<span class="fc" id="L65">    } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L66">      throw new WebApplicationException(e.getMessage(), 400);</span>
     }
   }
 
@@ -72,10 +72,10 @@ import java.util.Set;
   @Produces(MediaType.APPLICATION_JSON)
   public Warehouse getAWarehouseUnitByID(@PathParam(&quot;id&quot;) String id) {
     // Find warehouse by business unit code
-<span class="nc" id="L75">    var domainWarehouse = warehouseRepository.findByBusinessUnitCode(id);</span>
+<span class="fc" id="L75">    var domainWarehouse = warehouseRepository.findByBusinessUnitCode(id);</span>
     
-<span class="nc bnc" id="L77" title="All 2 branches missed.">    if (domainWarehouse == null) {</span>
-<span class="nc" id="L78">      throw new WebApplicationException(&quot;Warehouse with business unit code '&quot; + id + &quot;' not found&quot;, 404);</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">    if (domainWarehouse == null) {</span>
+<span class="fc" id="L78">      throw new WebApplicationException(&quot;Warehouse with business unit code '&quot; + id + &quot;' not found&quot;, 404);</span>
     }
     
 <span class="nc" id="L81">    return toWarehouseResponse(domainWarehouse);</span>
@@ -86,17 +86,17 @@ import java.util.Set;
   @Transactional
   public Response archiveAWarehouseUnitByID(@PathParam(&quot;id&quot;) String id) {
     // Find warehouse by business unit code
-<span class="nc" id="L89">    var domainWarehouse = warehouseRepository.findByBusinessUnitCode(id);</span>
+<span class="fc" id="L89">    var domainWarehouse = warehouseRepository.findByBusinessUnitCode(id);</span>
 
-<span class="nc bnc" id="L91" title="All 2 branches missed.">    if (domainWarehouse == null) {</span>
-<span class="nc" id="L92">      throw new WebApplicationException(&quot;Warehouse with business unit code '&quot; + id + &quot;' not found&quot;, 404);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">    if (domainWarehouse == null) {</span>
+<span class="fc" id="L92">      throw new WebApplicationException(&quot;Warehouse with business unit code '&quot; + id + &quot;' not found&quot;, 404);</span>
     }
 
     try {
       // Archive warehouse through use case (includes validations)
 <span class="nc" id="L97">      archiveWarehouseOperation.archive(domainWarehouse);</span>
-<span class="nc" id="L98">    } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L99">      throw new WebApplicationException(e.getMessage(), 400);</span>
+<span class="fc" id="L98">    } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L99">      throw new WebApplicationException(e.getMessage(), 400);</span>
 <span class="nc" id="L100">    }</span>
 <span class="nc" id="L101">    return Response.noContent().build();</span>
   }
@@ -109,11 +109,11 @@ import java.util.Set;
       @PathParam(&quot;businessUnitCode&quot;) String businessUnitCode,
       @NotNull Warehouse data) {
     // Convert API model to domain model
-<span class="nc" id="L112">    var domainWarehouse = new com.fulfilment.application.monolith.warehouses.domain.models.Warehouse();</span>
-<span class="nc" id="L113">    domainWarehouse.businessUnitCode = businessUnitCode; // Use businessUnitCode from path</span>
-<span class="nc" id="L114">    domainWarehouse.location = data.getLocation();</span>
-<span class="nc" id="L115">    domainWarehouse.capacity = data.getCapacity();</span>
-<span class="nc bnc" id="L116" title="All 2 branches missed.">    domainWarehouse.stock = data.getStock() != null ? data.getStock() : 0;</span>
+<span class="fc" id="L112">    var domainWarehouse = new com.fulfilment.application.monolith.warehouses.domain.models.Warehouse();</span>
+<span class="fc" id="L113">    domainWarehouse.businessUnitCode = businessUnitCode; // Use businessUnitCode from path</span>
+<span class="fc" id="L114">    domainWarehouse.location = data.getLocation();</span>
+<span class="fc" id="L115">    domainWarehouse.capacity = data.getCapacity();</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">    domainWarehouse.stock = data.getStock() != null ? data.getStock() : 0;</span>
 
     try {
       // Replace warehouse through use case (includes validations)
@@ -122,20 +122,20 @@ import java.util.Set;
       // Return the updated warehouse
 <span class="nc" id="L123">      var updated = warehouseRepository.findByBusinessUnitCode(businessUnitCode);</span>
 <span class="nc" id="L124">      return toWarehouseResponse(updated);</span>
-<span class="nc" id="L125">    } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L126">      throw new WebApplicationException(e.getMessage(), 400);</span>
+<span class="fc" id="L125">    } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L126">      throw new WebApplicationException(e.getMessage(), 400);</span>
     }
   }
 
   private Warehouse toWarehouseResponse(
       com.fulfilment.application.monolith.warehouses.domain.models.Warehouse warehouse) {
-<span class="nc" id="L132">    var response = new Warehouse();</span>
-<span class="nc" id="L133">    response.setBusinessUnitCode(warehouse.businessUnitCode);</span>
-<span class="nc" id="L134">    response.setLocation(warehouse.location);</span>
-<span class="nc" id="L135">    response.setCapacity(warehouse.capacity);</span>
-<span class="nc" id="L136">    response.setStock(warehouse.stock);</span>
+<span class="fc" id="L132">    var response = new Warehouse();</span>
+<span class="fc" id="L133">    response.setBusinessUnitCode(warehouse.businessUnitCode);</span>
+<span class="fc" id="L134">    response.setLocation(warehouse.location);</span>
+<span class="fc" id="L135">    response.setCapacity(warehouse.capacity);</span>
+<span class="fc" id="L136">    response.setStock(warehouse.stock);</span>
 
-<span class="nc" id="L138">    return response;</span>
+<span class="fc" id="L138">    return response;</span>
   }
 
     @GET
@@ -150,7 +150,7 @@ import java.util.Set;
         @QueryParam(&quot;page&quot;) @DefaultValue(&quot;0&quot;) int page,
         @QueryParam(&quot;pageSize&quot;) @DefaultValue(&quot;10&quot;) int pageSize
     ) {
-<span class="nc" id="L153">        var command = new SearchCommand(</span>
+<span class="fc" id="L153">        var command = new SearchCommand(</span>
             location,
             minCapacity,
             maxCapacity,
@@ -160,13 +160,13 @@ import java.util.Set;
             pageSize
         );
 
-<span class="nc" id="L163">        var result = searchWarehousesUseCase.execute(command);</span>
+<span class="fc" id="L163">        var result = searchWarehousesUseCase.execute(command);</span>
 
         // Manually create a JSON-like response object for RestAssured
-<span class="nc" id="L166">        var response = new java.util.HashMap&lt;String, Object&gt;();</span>
-<span class="nc" id="L167">        response.put(&quot;items&quot;, result.items().stream().map(this::toWarehouseResponse).toList());</span>
+<span class="fc" id="L166">        var response = new java.util.HashMap&lt;String, Object&gt;();</span>
+<span class="fc" id="L167">        response.put(&quot;items&quot;, result.items().stream().map(this::toWarehouseResponse).toList());</span>
 
-<span class="nc" id="L169">        return Response.ok(response).build();</span>
+<span class="fc" id="L169">        return Response.ok(response).build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

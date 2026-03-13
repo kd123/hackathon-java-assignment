@@ -12,60 +12,60 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
-<span class="nc" id="L15">public class WarehouseRepository implements PanacheRepository&lt;Warehouse&gt; {</span>
+<span class="fc" id="L15">public class WarehouseRepository implements PanacheRepository&lt;Warehouse&gt; {</span>
 
   public PagedResult&lt;Warehouse&gt; search(SearchCommand command) {
-<span class="nc" id="L18">    List&lt;String&gt; conditions = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L19">    Parameters params = new Parameters();</span>
+<span class="fc" id="L18">    List&lt;String&gt; conditions = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L19">    Parameters params = new Parameters();</span>
 
     // Always exclude archived warehouses
-<span class="nc" id="L22">    conditions.add(&quot;archivedAt IS NULL&quot;);</span>
+<span class="fc" id="L22">    conditions.add(&quot;archivedAt IS NULL&quot;);</span>
 
-<span class="nc bnc" id="L24" title="All 4 branches missed.">    if (command.location() != null &amp;&amp; !command.location().isBlank()) {</span>
-<span class="nc" id="L25">      conditions.add(&quot;location = :location&quot;);</span>
-<span class="nc" id="L26">      params.and(&quot;location&quot;, command.location());</span>
+<span class="pc bpc" id="L24" title="1 of 4 branches missed.">    if (command.location() != null &amp;&amp; !command.location().isBlank()) {</span>
+<span class="fc" id="L25">      conditions.add(&quot;location = :location&quot;);</span>
+<span class="fc" id="L26">      params.and(&quot;location&quot;, command.location());</span>
     }
-<span class="nc bnc" id="L28" title="All 2 branches missed.">    if (command.minCapacity() != null) {</span>
-<span class="nc" id="L29">      conditions.add(&quot;capacity &gt;= :minCapacity&quot;);</span>
-<span class="nc" id="L30">      params.and(&quot;minCapacity&quot;, command.minCapacity());</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">    if (command.minCapacity() != null) {</span>
+<span class="fc" id="L29">      conditions.add(&quot;capacity &gt;= :minCapacity&quot;);</span>
+<span class="fc" id="L30">      params.and(&quot;minCapacity&quot;, command.minCapacity());</span>
     }
-<span class="nc bnc" id="L32" title="All 2 branches missed.">    if (command.maxCapacity() != null) {</span>
-<span class="nc" id="L33">      conditions.add(&quot;capacity &lt;= :maxCapacity&quot;);</span>
-<span class="nc" id="L34">      params.and(&quot;maxCapacity&quot;, command.maxCapacity());</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">    if (command.maxCapacity() != null) {</span>
+<span class="fc" id="L33">      conditions.add(&quot;capacity &lt;= :maxCapacity&quot;);</span>
+<span class="fc" id="L34">      params.and(&quot;maxCapacity&quot;, command.maxCapacity());</span>
     }
 
-<span class="nc" id="L37">    String queryString = String.join(&quot; AND &quot;, conditions);</span>
+<span class="fc" id="L37">    String queryString = String.join(&quot; AND &quot;, conditions);</span>
 
     // Sorting
-<span class="nc" id="L40">    String sortByField = &quot;createdAt&quot;; // default sort</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">    if (&quot;capacity&quot;.equalsIgnoreCase(command.sortBy())) {</span>
-<span class="nc" id="L42">      sortByField = &quot;capacity&quot;;</span>
+<span class="fc" id="L40">    String sortByField = &quot;createdAt&quot;; // default sort</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">    if (&quot;capacity&quot;.equalsIgnoreCase(command.sortBy())) {</span>
+<span class="fc" id="L42">      sortByField = &quot;capacity&quot;;</span>
     }
-<span class="nc bnc" id="L44" title="All 2 branches missed.">    Sort.Direction direction = &quot;desc&quot;.equalsIgnoreCase(command.sortOrder()) ? Sort.Direction.Descending : Sort.Direction.Ascending;</span>
-<span class="nc" id="L45">    Sort sort = Sort.by(sortByField, direction);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">    Sort.Direction direction = &quot;desc&quot;.equalsIgnoreCase(command.sortOrder()) ? Sort.Direction.Descending : Sort.Direction.Ascending;</span>
+<span class="fc" id="L45">    Sort sort = Sort.by(sortByField, direction);</span>
 
-<span class="nc" id="L47">    PanacheQuery&lt;Warehouse&gt; query = find(queryString, sort, params);</span>
+<span class="fc" id="L47">    PanacheQuery&lt;Warehouse&gt; query = find(queryString, sort, params);</span>
 
     // Pagination
-<span class="nc" id="L50">    int page = Math.max(0, command.page());</span>
-<span class="nc" id="L51">    int pageSize = Math.min(100, Math.max(1, command.pageSize()));</span>
-<span class="nc" id="L52">    query.page(page, pageSize);</span>
+<span class="fc" id="L50">    int page = Math.max(0, command.page());</span>
+<span class="fc" id="L51">    int pageSize = Math.min(100, Math.max(1, command.pageSize()));</span>
+<span class="fc" id="L52">    query.page(page, pageSize);</span>
 
-<span class="nc" id="L54">    long totalCount = query.count();</span>
-<span class="nc" id="L55">    List&lt;Warehouse&gt; results = query.list();</span>
+<span class="fc" id="L54">    long totalCount = query.count();</span>
+<span class="fc" id="L55">    List&lt;Warehouse&gt; results = query.list();</span>
 
-<span class="nc" id="L57">    return PagedResult.from(results, page, pageSize, totalCount);</span>
+<span class="fc" id="L57">    return PagedResult.from(results, page, pageSize, totalCount);</span>
   }
 
   public void update(Warehouse warehouse) {
     // With Panache, calling persist on an entity with an existing ID will merge its state.
     // This is the correct way to ensure changes to a managed entity are flushed and that
     // optimistic locking checks are triggered upon transaction commit.
-<span class="nc" id="L64">    persist(warehouse);</span>
-<span class="nc" id="L65">  }</span>
+<span class="fc" id="L64">    persist(warehouse);</span>
+<span class="fc" id="L65">  }</span>
 
   public Warehouse findByBusinessUnitCode(String buCode) {
-<span class="nc" id="L68">    return find(&quot;businessUnitCode&quot;, buCode).firstResult();</span>
+<span class="fc" id="L68">    return find(&quot;businessUnitCode&quot;, buCode).firstResult();</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

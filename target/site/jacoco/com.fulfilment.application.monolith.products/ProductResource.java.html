@@ -24,11 +24,11 @@ import org.jboss.logging.Logger;
 @ApplicationScoped
 @Produces(&quot;application/json&quot;)
 @Consumes(&quot;application/json&quot;)
-<span class="nc" id="L27">public class ProductResource {</span>
+<span class="fc" id="L27">public class ProductResource {</span>
 
   @Inject ProductRepository productRepository;
 
-<span class="nc" id="L31">  private static final Logger LOGGER = Logger.getLogger(ProductResource.class.getName());</span>
+<span class="fc" id="L31">  private static final Logger LOGGER = Logger.getLogger(ProductResource.class.getName());</span>
 
   @GET
   public List&lt;Product&gt; get() {
@@ -38,9 +38,9 @@ import org.jboss.logging.Logger;
   @GET
   @Path(&quot;{id}&quot;)
   public Product getSingle(Long id) {
-<span class="nc" id="L41">    Product entity = productRepository.findById(id);</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">    if (entity == null) {</span>
-<span class="nc" id="L43">      throw new WebApplicationException(&quot;Product with id of &quot; + id + &quot; does not exist.&quot;, 404);</span>
+<span class="fc" id="L41">    Product entity = productRepository.findById(id);</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">    if (entity == null) {</span>
+<span class="fc" id="L43">      throw new WebApplicationException(&quot;Product with id of &quot; + id + &quot; does not exist.&quot;, 404);</span>
     }
 <span class="nc" id="L45">    return entity;</span>
   }
@@ -48,8 +48,8 @@ import org.jboss.logging.Logger;
   @POST
   @Transactional
   public Response create(Product product) {
-<span class="nc bnc" id="L51" title="All 2 branches missed.">    if (product.id != null) {</span>
-<span class="nc" id="L52">      throw new WebApplicationException(&quot;Id was invalidly set on request.&quot;, 422);</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">    if (product.id != null) {</span>
+<span class="fc" id="L52">      throw new WebApplicationException(&quot;Id was invalidly set on request.&quot;, 422);</span>
     }
 
 <span class="nc" id="L55">    productRepository.persist(product);</span>
@@ -60,14 +60,14 @@ import org.jboss.logging.Logger;
   @Path(&quot;{id}&quot;)
   @Transactional
   public Product update(Long id, Product product) {
-<span class="nc bnc" id="L63" title="All 2 branches missed.">    if (product.name == null) {</span>
-<span class="nc" id="L64">      throw new WebApplicationException(&quot;Product Name was not set on request.&quot;, 422);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">    if (product.name == null) {</span>
+<span class="fc" id="L64">      throw new WebApplicationException(&quot;Product Name was not set on request.&quot;, 422);</span>
     }
 
-<span class="nc" id="L67">    Product entity = productRepository.findById(id);</span>
+<span class="fc" id="L67">    Product entity = productRepository.findById(id);</span>
 
-<span class="nc bnc" id="L69" title="All 2 branches missed.">    if (entity == null) {</span>
-<span class="nc" id="L70">      throw new WebApplicationException(&quot;Product with id of &quot; + id + &quot; does not exist.&quot;, 404);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">    if (entity == null) {</span>
+<span class="fc" id="L70">      throw new WebApplicationException(&quot;Product with id of &quot; + id + &quot; does not exist.&quot;, 404);</span>
     }
 
 <span class="nc" id="L73">    entity.name = product.name;</span>
@@ -84,9 +84,9 @@ import org.jboss.logging.Logger;
   @Path(&quot;{id}&quot;)
   @Transactional
   public Response delete(Long id) {
-<span class="nc" id="L87">    Product entity = productRepository.findById(id);</span>
-<span class="nc bnc" id="L88" title="All 2 branches missed.">    if (entity == null) {</span>
-<span class="nc" id="L89">      throw new WebApplicationException(&quot;Product with id of &quot; + id + &quot; does not exist.&quot;, 404);</span>
+<span class="fc" id="L87">    Product entity = productRepository.findById(id);</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">    if (entity == null) {</span>
+<span class="fc" id="L89">      throw new WebApplicationException(&quot;Product with id of &quot; + id + &quot; does not exist.&quot;, 404);</span>
     }
 <span class="nc" id="L91">    productRepository.delete(entity);</span>
 <span class="nc" id="L92">    return Response.status(204).build();</span>
